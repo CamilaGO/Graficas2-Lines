@@ -59,7 +59,7 @@ class Render(object):
 		new_x = round((x+1)*(self.vpWidth/2)+self.vpx)
 		new_y = round((y+1)*(self.vpHeight/2)+self.vpy)
 		#Linea 59 y 58 basadas en https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glViewport.xhtml
-		self.framebuffer[new_x][new_y] = self.curr_color
+		self.framebuffer[new_y][new_x] = self.curr_color
 	
 	def glColor(self, r=1, g=1, b=1):
 		red = round(r*255)
@@ -67,42 +67,47 @@ class Render(object):
 		blue = round(g*255)
 		self.curr_color = changecolor(red, green, blue)
 
+	def glLinePoint(self, x, y):
+		self.framebuffer[y][x] = self.curr_color
+
 	#Funciones para aplicar la ecuacion de la recta y dibujar lineas
-	def drawLine(self, x0, y0, x1, y1):
-		dy = abs(y1 - y0)
+	def glLine(self, x0, y0, x1, y1):
+		#Para poder solo recibir coordenadas entre -1 y 1
+		x0 = round((x0+1)*(self.vpWidth/2)+self.vpx)
+		y0 = round((y0+1)*(self.vpHeight/2)+self.vpy)
+		x1 = round((x1+1)*(self.vpWidth/2)+self.vpx)
+		y1 = round((y1+1)*(self.vpHeight/2 )+self.vpy)
+
 		dx = abs(x1 - x0)
+		dy = abs(y1 - y0)
 
-		offset = 0 
-		threshold =  dx
+		steep = dy > dx
 
+		if steep:
+			x0, y0 = y0, x0
+			x1, y1 = y1, x1
+		if x0 > x1:
+		 	x0, x1 = x1, x0
+		 	y0, y1 = y1, y0
+
+		dx = abs(x1 - x0)
+		dy = abs(y1 - y0)
+
+		offset = 0
+		limit = dx
+		
 		y = y0
 		for x in range(x0, x1):
-			if dy > dx:
-				self.glVertex(y, x)
+			if steep:
+				self.glLinePoint(y, x)
 			else:
-				self.glVertex(x, y)
+				self.glLinePoint(x, y)
 			
-			offset += dy * 2 
-			if offset >= threshold:
-				y += 1 if y0 < y1 else - 1
-				threshold += 2 * dx
-
-	def glLine(self, x0, y0, x1, y1):
-		dx = abs(x1 - x0)
-		dy = abs(y1 - y0)
-
-		if dy < dx:
-			self.drawLine(x0, y0, x1, y1)
-		else:
-			self.drawLine(y0, x0, y1, x1)
-
-		if x0 > x1:
-			self.drawLine(x1, y1, x0, y0)
-		else:
-			self.drawLine(x0, y0, x1, y1)
-
+			offset += dy*2
+			if offset >= limit:
+				y += 1 if y0 < y1 else -1
+				limit += 2*dx
 	
-
 	def finish(self, filename):
 		f = open(filename, 'bw')
 

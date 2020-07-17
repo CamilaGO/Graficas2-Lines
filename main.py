@@ -13,12 +13,19 @@ bitmap = Render(width, height, 0, 0, 0) #los ultimos tres son los colores son lo
 
 bitmap.glViewPort(posX, posY, width - 500 , height - 500)
 
-bitmap.glColor(1, 0, 0) #estos colores son los que se usaran en Vertex
+#principales (t)
+bitmap.glColor(1, 1, 1) #estos colores son los que se usaran en Vertex
+bitmap.glLine(0, -1, 0, 1)
+bitmap.glLine(-1, 0, 1, 0)
 
-bitmap.glLine(0, 0, 1, 1)
-
-bitmap.glVertex(1, 1)
-
-bitmap.glVertex(0, 0)
+bitmap.glColor(0, 1, 0) 
+bitmap.glLine(1, -1, -1, 1)
+bitmap.glLine(-1, -1, 1, 1)
+#margen
+bitmap.glColor(1, 0, 0) 
+bitmap.glLine(-1, 1, 1, 1)
+bitmap.glLine(1, -1, 1, 1)
+bitmap.glLine(1, -1, -1, -1)
+bitmap.glLine(-1, -1, -1, 1)
 
 bitmap.finish('out.bmp')
