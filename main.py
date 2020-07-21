@@ -9,9 +9,11 @@ posY = 250
 width = 1000
 height = 1000
 
-bitmap = Render(width, height, 0, 0, 0) #los ultimos tres son los colores son los del background
+bitmap = Render(width, height) #los ultimos tres son los colores son los del background
 
 bitmap.glViewPort(posX, posY, width - 500 , height - 500)
+bitmap.glClearColor(0, 0, 0)
+bitmap.glclear()
 
 #principales (t)
 bitmap.glColor(1, 1, 1) #estos colores son los que se usaran en Vertex

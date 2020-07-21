@@ -21,13 +21,13 @@ WHITE = changecolor(255,255,255)
 RED = changecolor(255, 0, 0)
 
 class Render(object):
-	def __init__(self, width, height, r, g, b):
+	def __init__(self, width, height):
 		self.framebuffer = []
 		self.clear_color = BLACK
 		self.curr_color = RED
 		self.glCreateWindow(width, height)
-		self.glClearColor(r, g, b)
-		self.glclear()
+		#self.glClearColor(r, g, b)
+		#self.glclear()
 
 	def glInit():
 		#Se inicializan variables
